@@ -37,6 +37,11 @@
     name: ansible-container
     state: latest 
 
+- name: Install Docker
+  pip:
+    name: docker
+    state: latest
+
 - name: Add Docker repo
   command: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 

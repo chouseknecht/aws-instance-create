@@ -1,0 +1,10 @@
+- name: Build the conductor distro image
+  command: "python ./setup.py prebake --distros {{ item }} --debug"
+  args:
+    chdir: /root/ansible-container
+
+- name: Run tests
+  command: python ./setup.py test --ansible-args="-vvv"
+  args:
+    chdir: /root/ansible-container
+

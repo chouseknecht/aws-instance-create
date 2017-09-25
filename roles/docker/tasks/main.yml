@@ -1,0 +1,56 @@
+- name: Update all packages
+  yum:
+    name: '*'
+    state: latest
+  
+- name: Install prereqs
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+  - yum-utils
+  - device-mapper-persistent-data
+  - lvm2
+  - epel-release
+  - python-devel
+
+- name: Install development tools
+  yum: 
+    name: '@Development tools'
+    state: present
+
+- name: Install pip
+  yum:
+    name: python-pip
+    state: present
+
+- name: Install Ansible
+  pip:
+    name: ansible
+    version: 2.4.0
+
+- name: Upgrade setup tools
+  command: 'pip install --upgrade setuptools'
+
+- name: Install docker Python module 
+  pip:
+    name: docker
+    state: latest
+
+- name: Add Docker repo
+  command: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+
+- name: Update the package index
+  command: yum makecache fast
+
+- name: Install docker
+  yum:
+    name: docker-ce
+    state: present
+  
+- name: Start docker
+  service:
+    name: docker
+    state: started
+    enabled: yes
+

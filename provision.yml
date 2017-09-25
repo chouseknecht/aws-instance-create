@@ -1,0 +1,55 @@
+# provision_staging.yml
+---
+- name: Create ec2 instance
+  hosts: localhost 
+  gather_facts: no
+  connection: local
+  vars_files:
+  - vars.yml
+  tasks:
+
+  - name: Create staging instance 
+    ec2:
+      aws_access_key: "{{ aws_access_key }}"
+      aws_secret_key: "{{ aws_secret_key }}"
+      key_name: chouse
+      instance_type: m3.large
+      image: ami-46c1b650
+      wait: yes
+      wait_timeout: 360
+      group: ansible-container 
+      instance_tags:
+        awx-demo: yes
+      count_tag:
+        awx-demo: yes
+      exact_count: 1
+      vpc_subnet_id: subnet-65a3522e
+      assign_public_ip: yes  
+      region: us-east-1
+      termination_protection: yes
+    register: ec2
+  
+  - name: Add new instance to host group
+    add_host:
+      hostname: "{{ item.public_ip }}"
+      groupname: myhosts 
+      ansible_user: centos
+    with_items: "{{ ec2.instances }}"
+    when: ec2 is defined
+
+  - name: Wait for SSH to come up
+    wait_for:
+      host: "{{ item.public_dns_name }}"
+      port: 22
+      delay: 60
+      timeout: 320
+      state: started
+    with_items: "{{ ec2.instances }}"
+    when: ec2 is defined
+
+- name: Configure new instance
+  hosts: myhosts 
+  become: yes
+  roles:
+  - role: docker
+

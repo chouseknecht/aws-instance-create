@@ -1,0 +1,25 @@
+- name: Update sudoers
+  lineinfile:
+    path: /etc/sudoers
+    state: present
+    line: '%wheel        ALL=(ALL)       NOPASSWD: ALL'
+
+- name: Create docker group
+  group:
+    name: docker
+    state: present
+
+- name: Create user
+  user:
+    name: "{{ user }}" 
+    groups: docker,wheel
+    append: yes
+    shell: /bin/bash 
+
+- name: Add ssh keys
+  authorized_key:
+    user: "{{ user }}"
+    state: present
+    key: "https://github.com/{{ item }}.keys"
+  with_items: "{{ github_users }}"
+

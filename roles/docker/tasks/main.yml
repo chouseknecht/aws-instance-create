@@ -47,10 +47,17 @@
   yum:
     name: docker-ce
     state: present
+
+- name: Add user to 'docker' group 
+  user:
+    name: "{{ ansible_user }}"
+    groups: docker
+    append: yes 
   
 - name: Start docker
   service:
     name: docker
     state: started
     enabled: yes
+
 

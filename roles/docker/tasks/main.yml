@@ -32,10 +32,10 @@
 - name: Upgrade setup tools
   command: 'pip install --upgrade setuptools'
 
-- name: Install docker Python module 
+- name: Install Ansible Container
   pip:
-    name: docker
-    state: latest
+    name: ansible-container
+    state: latest 
 
 - name: Add Docker repo
   command: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo

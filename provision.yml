@@ -15,9 +15,7 @@
       wait_timeout: 360
       group: ansible-container 
       instance_tags:
-        awx-dev: yes
-      count_tag:
-        awx-dev: yes
+        awx_user_tag: "{{ instance_tag }}"  
       vpc_subnet_id: subnet-65a3522e
       assign_public_ip: yes  
       region: us-east-1

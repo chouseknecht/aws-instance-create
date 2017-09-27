@@ -1,7 +1,7 @@
-- name: Update all packages
-  yum:
-    name: '*'
-    state: latest
+#- name: Update all packages
+#  yum:
+#    name: '*'
+#    state: latest
   
 - name: Install prereqs
   yum:

@@ -1,0 +1,23 @@
+---
+- name: Remove AWX
+  hosts: all
+  gather_facts: no
+  become: yes
+  tasks:
+  - name: Remove containers
+    shell: docker rm --force $(docker ps -qa) 
+    ignore_errors: yes   
+
+  - name: Remove images 
+    shell: docker rmi --force $(docker images -q)
+    ignore_errors: yes   
+
+  - name: Remove data directory
+    file:
+      path: /tmp/pgdocker
+      state: absent
+
+  - name: Remove image deploy directory
+    file:
+      path: /tmp/docker_deploy
+      state: absent

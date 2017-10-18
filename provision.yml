@@ -6,7 +6,7 @@
   #- vars.yml
   tasks:
 
-  - name: Create staging instance 
+  - name: Create instance 
     ec2:
       key_name: chouse
       instance_type: "{{ instance_type }}" 

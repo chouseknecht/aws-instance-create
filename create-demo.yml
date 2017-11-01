@@ -2,13 +2,11 @@
 ---
 - name: Create ec2 instance
   hosts: all 
-  gather_facts: no
+  vars_files:
+  - vars.yml
+  vars:
+    instance_type: 'm3.large'
   tasks:
-
-  - name: Initialize instances_created
-    set_stats:
-      data:
-        instances_created: 0
 
   - name: Create instance 
     ec2:
@@ -19,11 +17,13 @@
       wait_timeout: 360
       group: ansible-container 
       instance_tags:
-        awx-user: "{{ instance_tag }}"
-        awx-dev: true
+        awx-demo: true
+#        awx-user: "{{ instance_tag }}"
+#        awx-dev: true
       count_tag:
-        awx-user: "{{ instance_tag }}"
-      exact_count: 1
+        awx-demo: true 
+#        awx-user: "{{ instance_tag }}"
+      exact_count: 2
       vpc_subnet_id: subnet-65a3522e
       assign_public_ip: yes  
       region: us-east-1
@@ -53,10 +53,4 @@
   become: yes
   roles:
   - role: docker
-
-  tasks:
-  - name: Demonstrate setting stats  
-    set_stats:
-      data:
-        instances_created: "{{ groups['myhosts'] | length }}" 
 

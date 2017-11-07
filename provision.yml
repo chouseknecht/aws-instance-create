@@ -5,11 +5,6 @@
   gather_facts: no
   tasks:
 
-  - name: Initialize instances_created
-    set_stats:
-      data:
-        instances_created: 0
-
   - name: Create instance 
     ec2:
       key_name: chouse
